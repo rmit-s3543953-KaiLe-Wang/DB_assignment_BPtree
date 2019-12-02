@@ -1,0 +1,32 @@
+The part 3 is B+ tree implementation in JAVA.
+Each file are doing the following jobs:
+- Dbload.java -> Comes straight from previous assignment of this course. It is used to load the csv file into a heap file
+- Dbquery.java -> Comes straight from previous assignment. It is used to retrieve the data from the heap file according to the search field input. (for comparison purpose)
+- BPlusTree.java -> The tree structure itself, the file defines what the tree would has, also provide some helper functions.
+- BPlusNode.java -> The node in the b+ tree, which contains entries, children, etc. Some methods had been implemented such as insert, get record(s), update if there is a duplicate record (append new value as string).
+- TreeSave.java -> utilize the Tree and save it into file(s). Also save the bottom of the tree (i.e. the linked list which can be used to traversal the entire dataset).
+- Treequery.java -> like dbquery.java, Treequery.java accepts search field inputs and retrieve the results depends on them, it can perform equality search and range query
+
+The algorithm of insertion method can be summarized as the following cases:
+case 1. if leaf page is full AND index page is full: Directly insert the record into the leaf
+case 2. if leaf page is full AND index page is not full, do:
+        2.a split leaf page
+        2.b insert middle node into index page (push up)
+        2.c any value less than middle node will be on the left-hand side.
+        2.d any value more than middle node will be on the right-hand side.
+case 3. if leaf page is full AND index page is full, do:
+        3.a split leaf page.
+        3.b Any leaf value less than middle node will be on the left-hand side.
+        3.c Any leaf value more than middle node will be on the right-hand side.
+        3.d Split index page
+        3.e Similar to step 2 and 3, this time we move the index node (intermediate nodes) onto left-hand side or right-hand side based on the value of middle.
+        3.f The middle value index node will be pushed up to the one level above.
+        3.g Update and see if any pages (leaf or index) are full (the left-hand side of the table requirement has been fulfilled), re-do the operation if necessary.
+
+The algorithm of get (get matched data) method can be summarized as the following steps:
+1. Start from the root node.
+2. See the current node, if it is a leaf node.
+    a. If it is a leaf, use binary search to find the value, if nothing matches, return null.
+3. Search for the most left-hand side of current level node, see if the searching value is smaller than that or not, if it is smaller, recursive call to its most left-hand node’s children do step 2 again.
+4. Like step 3, this time we compare with the most right-hand side node and see if the key is too large or not. If so, jump to the most right-hand node’s children and do step 2 again.
+5. If step 3 and 4 are all passed, then it means the value of interested should be in between the current index page. So, try binary search, and return the closest value of index node (preferably a same value of index), make a recursive call based on that node, and repeat step 2.
