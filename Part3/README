@@ -7,6 +7,7 @@ Each file are doing the following jobs:
 - TreeSave.java -> utilize the Tree and save it into file(s). Also save the bottom of the tree (i.e. the linked list which can be used to traversal the entire dataset).
 - Treequery.java -> like dbquery.java, Treequery.java accepts search field inputs and retrieve the results depends on them, it can perform equality search and range query
 
+-------------------------------------------------------------------------------------------------
 The algorithm of insertion method can be summarized as the following cases:
 case 1. if leaf page is full AND index page is full: Directly insert the record into the leaf
 case 2. if leaf page is full AND index page is not full, do:
@@ -23,6 +24,7 @@ case 3. if leaf page is full AND index page is full, do:
         3.f The middle value index node will be pushed up to the one level above.
         3.g Update and see if any pages (leaf or index) are full (the left-hand side of the table requirement has been fulfilled), re-do the operation if necessary.
 
+--------------------------------------------------------------------------------------------------
 The algorithm of get (get matched data) method can be summarized as the following steps:
 1. Start from the root node.
 2. See the current node, if it is a leaf node.
