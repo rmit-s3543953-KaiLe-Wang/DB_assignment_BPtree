@@ -85,30 +85,7 @@ public class TreeSave {
 					file.read(inViolation);
 					offset+=2;
 					count++;
-					//System.out.println("da: "+da);
-					//deviceId==Integer.parseInt(query);
-					//System.out.println(da.replace(" ",""));
-					//if(da.replace(" ","").contains(query))
-					/*
-					{
-						System.out.println("deviceid: "+deviceId);
-						System.out.println("arrival time: "+arrivalTime);
-						System.out.println("departure time: "+departureTime);
-						System.out.println("duration: "+durationSec);
-						System.out.println("street marker: "+streetMarker);
-						System.out.println("sign: "+sign);
-						System.out.println("area: "+area);
-						System.out.println("street Id: "+byteArrayToInt(streetId));
-						System.out.println("street name: "+streetName);
-						System.out.println("between street1: "+between1);
-						String[] data =between2.split(",");
-						//System.out.println("between street2: "+between2);
-						System.out.println("between street2: "+data[0]);
-						//System.out.println("extra: "+data[1]);
-						System.out.println("side of a street: "+byteArrayToInt(side));
-						System.out.println("inViolation: "+new String(inViolation));
-					}*/
-						
+					
 					// now it is the last of the record. see if the next byte is 0 or not
 					// because device id does not start from 0
 					// so check it and see if it is the last page.
@@ -202,60 +179,6 @@ public class TreeSave {
 		}
 		f.close();
 	}
-
-	public static String readBlock(RandomAccessFile file) throws IOException {
-		// to the offset
-		file.seek(offset);
-		// read 4 bytes for devices and 22 bytes for arrival time = DA_NAME field.
-		byte[] DA_NAME = new byte[4 + 22];
-		file.read(DA_NAME);
-		byte[] d_id = Arrays.copyOfRange(DA_NAME, 0, 4);
-		int deviceId = byteArrayToInt(d_id);
-		// System.out.println(byteArrayToInt(d_id));
-		byte[] a_time = Arrays.copyOfRange(DA_NAME, 4, DA_NAME.length);
-		String arrivalTime = new String(a_time);
-		String da = deviceId + arrivalTime;
-		offset += 26;
-		// System.out.println(new String(a_time));
-		// see if the DA_NAME fields contain the query statement.
-
-		// if so, continue reading this record.
-		// 1. read Departure time
-		file.seek(offset);
-		byte[] d_time = new byte[22];
-		file.read(d_time);
-		String departureTime = new String(d_time);
-		// System.out.println(new String(d_time));
-		offset += 23;
-		String durationSec = findData(file);
-		String streetMarker = findData(file);
-		String sign = findData(file);
-		String area = findData(file);
-		file.seek(offset);
-		byte[] streetId = new byte[4];
-		file.read(streetId);
-		offset += 5;
-		String streetName = findData(file);
-		String between1 = findData(file);
-		String between2 = findData(file);
-		// String side=findData(file,offset);
-		// String inViolation=findData(file,offset);
-
-		file.seek(offset);
-		byte[] side = new byte[4];
-		file.read(side);
-		offset += 4;
-		file.seek(offset);
-		byte[] inViolation = new byte[1];
-		file.read(inViolation);
-		offset += 2;
-		String data = Integer.toString(deviceId) + " " + arrivalTime + " " + departureTime + " " + durationSec + " "
-				+ streetMarker + " " + sign + " " + area + " " + byteArrayToInt(streetId) + " " + streetName.toString()
-				+ " " + between1.toString() + " " + between2.toString() + " " + byteArrayToInt(side) + " "
-				+ new String(inViolation);
-		return data;
-	}
-
 	public static int byteArrayToInt(byte[] b) {
 
 		return b[3] & 0xFF | (b[2] & 0xFF) << 8 | (b[1] & 0xFF) << 16 | (b[0] & 0xFF) << 24;
